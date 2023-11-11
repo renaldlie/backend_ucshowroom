@@ -1,0 +1,8 @@
+# Ignore All .idea configuration
+.idea/*
+
+# answers
+answers/*
+
+# change on deploy
+deploy_change/*
