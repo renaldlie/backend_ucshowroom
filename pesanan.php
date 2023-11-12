@@ -2,6 +2,9 @@
 require_once "connection.php";
 require_once "utils.php";
 header('Content-type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: DELETE");
+header("Access-Control-Allow-Headers: Content-Type");
 
 if (isset($_GET['api']) && function_exists($_GET['api'])) {
     checkRequestHeader();
@@ -134,32 +137,28 @@ function delete()
     global $connect;
     checkRequestMethod('DELETE');
 
-    // Check if 'id' parameter is set
-    if (!isset($_GET['id'])) {
+    // Check if 'id_pesanan' parameter is set
+    if (!isset($_GET['id_pesanan'])) {
         http_response_code(400);
         echo json_encode(['status' => 0, 'message' => 'Missing ID parameter'], JSON_NUMERIC_CHECK);
         die();
     }
 
-    $id = $_GET['id'];
+    $id_pesanan = $_GET['id_pesanan'];
 
-    // Check if the customer with the specified ID exists
-    $existingUserQuery = mysqli_query($connect, "SELECT * FROM pesanan WHERE id_pesanan = '$id'");
-    if (!mysqli_num_rows($existingUserQuery)) {
-        http_response_code(404);
-        echo json_encode(['status' => 0, 'message' => 'User not found'], JSON_NUMERIC_CHECK);
-        die();
-    }
-
-    // Delete the customer with the specified ID
-    $deleteQuery = "DELETE FROM pesanan WHERE id_pesanan = '$id'";
+    // Delete the pesanan with the specified ID
+    $deleteQuery = "DELETE FROM pesanan WHERE id_pesanan = '$id_pesanan'";
     $result = mysqli_query($connect, $deleteQuery);
 
     if ($result) {
         http_response_code(200);
         echo json_encode(['status' => 1, 'message' => 'Pesanan deleted successfully'], JSON_NUMERIC_CHECK);
     } else {
+        // Log the error
+        error_log("MySQL Delete Error: " . mysqli_error($connect));
+
         http_response_code(500);
         echo json_encode(['status' => 0, 'message' => 'Failed to delete pesanan'], JSON_NUMERIC_CHECK);
     }
 }
+

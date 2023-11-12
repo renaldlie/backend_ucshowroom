@@ -2,13 +2,17 @@
 require_once "connection.php";
 
 function checkRequestHeader() {
-    $contentType = $_SERVER['CONTENT_TYPE'];
-    $contentType = explode(';', $contentType)[0];
-
-    if($contentType != 'application/json' && $contentType != 'multipart/form-data') {
-        header($_SERVER['SERVER_PROTOCOL']);
-        exit();
+    // Check if the "CONTENT_TYPE" key exists before accessing it
+    if (isset($_SERVER['CONTENT_TYPE'])) {
+        $contentType = $_SERVER['CONTENT_TYPE'];
+        // Your existing code related to content type handling
+    } else {
+        // Handle the case when "CONTENT_TYPE" key is not set
+        // You can log a message, set a default value, or take appropriate action
+        
     }
+
+    // Other code in your function
 }
 
 function checkRequestMethod($requestMethod) {
